@@ -20,6 +20,38 @@ export class UIController {
         canvas.addEventListener("mousedown", this.mouseDownHandler);
         canvas.addEventListener("mousemove", this.mouseMoveHandler);
         canvas.addEventListener("mouseup", this.mouseUpHandler);
+        window.addEventListener("keydown", this.keyDownHandler);
+        window.addEventListener("keyup", this.keyUpHandler);
+    }
+
+    public keyDownHandler = (event : KeyboardEvent) : void => {
+        if(event.key == "w"){
+            SceneGraph.setMoveUp(true);
+        }
+        if(event.key == "s"){
+            SceneGraph.setMoveDown(true);
+        }
+        if(event.key == "a"){
+            SceneGraph.setMoveRight(true);
+        }
+        if(event.key == "d"){
+            SceneGraph.setMoveLeft(true);
+        }
+    }
+
+    public keyUpHandler = (event : KeyboardEvent) : void => {
+        if(event.key == "w"){
+            SceneGraph.setMoveUp(false);
+        }
+        if(event.key == "s"){
+            SceneGraph.setMoveDown(false);
+        }
+        if(event.key == "a"){
+            SceneGraph.setMoveRight(false);
+        }
+        if(event.key == "d"){
+            SceneGraph.setMoveLeft(false);
+        }
     }
 
     public mouseDownHandler = (event : MouseEvent) : void => {

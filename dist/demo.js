@@ -2039,8 +2039,8 @@ var WebGLGameSpriteRenderer = function (_WebGLGameRenderingCo) {
             // CALCULATE HOW MUCH TO TRANSLATE THE QUAD PER THE SPRITE POSITION
             var spriteWidth = spriteType.getSpriteWidth();
             var spriteHeight = spriteType.getSpriteHeight();
-            var spriteXInPixels = sprite.getPosition().getX() + spriteWidth / 2;
-            var spriteYInPixels = sprite.getPosition().getY() + spriteHeight / 2;
+            var spriteXInPixels = sprite.getPosition().getX() + spriteWidth / 2 + viewport.getX();
+            var spriteYInPixels = sprite.getPosition().getY() + spriteHeight / 2 + viewport.getY();
             var spriteXTranslate = (spriteXInPixels - canvasWidth / 2) / (canvasWidth / 2);
             var spriteYTranslate = (spriteYInPixels - canvasHeight / 2) / (canvasHeight / 2);
             this.meshTranslate.setX(spriteXTranslate);
@@ -2227,6 +2227,10 @@ var SceneGraph = function () {
             this.visibleSet = [];
             this.tiledLayers = [];
             this.tileSets = [];
+            this.upPos = 0;
+            this.downPos = 0;
+            this.leftPos = 0;
+            this.rightPos = 0;
         }
     }, {
         key: "addTileSet",
@@ -2313,6 +2317,9 @@ var SceneGraph = function () {
 
             return null;
         }
+    }, {
+        key: "update",
+
         /**
          * update
          *
@@ -2322,9 +2329,6 @@ var SceneGraph = function () {
          * @param delta The time that has passed since the last time this update
          * funcation was called.
          */
-
-    }, {
-        key: "update",
         value: function update(delta) {
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
@@ -2350,6 +2354,20 @@ var SceneGraph = function () {
                     }
                 }
             }
+
+            if (SceneGraph.moveUp) {
+                this.upPos += 1;
+            }
+            if (SceneGraph.moveDown) {
+                this.downPos += 1;
+            }
+            if (SceneGraph.moveLeft) {
+                this.leftPos += 1;
+            }
+            if (SceneGraph.moveRight) {
+                this.rightPos += 1;
+            }
+            this.viewport.setPosition(this.rightPos - this.leftPos, this.upPos - this.downPos);
         }
     }, {
         key: "scope",
@@ -2365,7 +2383,14 @@ var SceneGraph = function () {
                 for (var _iterator3 = this.animatedSprites[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                     var sprite = _step3.value;
 
-                    this.visibleSet.push(sprite);
+                    var spriteType = sprite.getSpriteType();
+                    var spriteWidth = spriteType.getSpriteWidth();
+                    var spriteHeight = spriteType.getSpriteHeight();
+                    var spriteXInPixels = sprite.getPosition().getX() + spriteWidth + this.viewport.getX();
+                    var spriteYInPixels = sprite.getPosition().getY() + spriteHeight + this.viewport.getY();
+                    if (spriteXInPixels > 0) {
+                        this.visibleSet.push(sprite);
+                    }
                 }
             } catch (err) {
                 _didIteratorError3 = true;
@@ -2383,6 +2408,26 @@ var SceneGraph = function () {
             }
 
             return this.visibleSet;
+        }
+    }], [{
+        key: "setMoveUp",
+        value: function setMoveUp(b) {
+            this.moveUp = b;
+        }
+    }, {
+        key: "setMoveDown",
+        value: function setMoveDown(b) {
+            this.moveDown = b;
+        }
+    }, {
+        key: "setMoveLeft",
+        value: function setMoveLeft(b) {
+            this.moveLeft = b;
+        }
+    }, {
+        key: "setMoveRight",
+        value: function setMoveRight(b) {
+            this.moveRight = b;
         }
     }]);
 
@@ -2895,12 +2940,41 @@ exports.TiledLayer = TiledLayer;
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var SceneGraph_1 = require("../scene/SceneGraph");
 
 var UIController = function UIController(canvasId, initScene) {
     var _this = this;
 
     _classCallCheck(this, UIController);
 
+    this.keyDownHandler = function (event) {
+        if (event.key == "w") {
+            SceneGraph_1.SceneGraph.setMoveUp(true);
+        }
+        if (event.key == "s") {
+            SceneGraph_1.SceneGraph.setMoveDown(true);
+        }
+        if (event.key == "a") {
+            SceneGraph_1.SceneGraph.setMoveRight(true);
+        }
+        if (event.key == "d") {
+            SceneGraph_1.SceneGraph.setMoveLeft(true);
+        }
+    };
+    this.keyUpHandler = function (event) {
+        if (event.key == "w") {
+            SceneGraph_1.SceneGraph.setMoveUp(false);
+        }
+        if (event.key == "s") {
+            SceneGraph_1.SceneGraph.setMoveDown(false);
+        }
+        if (event.key == "a") {
+            SceneGraph_1.SceneGraph.setMoveRight(false);
+        }
+        if (event.key == "d") {
+            SceneGraph_1.SceneGraph.setMoveLeft(false);
+        }
+    };
     this.mouseDownHandler = function (event) {
         var mousePressX = event.clientX;
         var mousePressY = event.clientY;
@@ -2931,10 +3005,12 @@ var UIController = function UIController(canvasId, initScene) {
     canvas.addEventListener("mousedown", this.mouseDownHandler);
     canvas.addEventListener("mousemove", this.mouseMoveHandler);
     canvas.addEventListener("mouseup", this.mouseUpHandler);
+    window.addEventListener("keydown", this.keyDownHandler);
+    window.addEventListener("keyup", this.keyUpHandler);
 };
 
 exports.UIController = UIController;
 
-},{}]},{},[1])
+},{"../scene/SceneGraph":15}]},{},[1])
 
 //# sourceMappingURL=demo.js.map

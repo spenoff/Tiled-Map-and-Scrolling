@@ -24,6 +24,16 @@ export class SceneGraph {
     // THE VIEWPORT IS USED TO FILTER OUT WHAT IS NOT VISIBLE
     private viewport : Viewport;
 
+    //THESE VARIABLES WILL BE USED TO MOVE THE VIEWPORT
+    static moveUp : boolean;
+    static moveDown : boolean;
+    static moveLeft : boolean;
+    static moveRight : boolean;
+    private upPos : number;
+    private downPos : number;
+    private leftPos : number;
+    private rightPos : number;
+
     public constructor() {
         // DEFAULT CONSTRUCTOR INITIALIZES OUR DATA STRUCTURES
         this.clear();
@@ -34,6 +44,10 @@ export class SceneGraph {
         this.visibleSet = [];
         this.tiledLayers = [];
         this.tileSets = [];
+        this.upPos = 0;
+        this.downPos = 0;
+        this.leftPos = 0;
+        this.rightPos = 0;
     }
 
     public addTileSet(tileSetToAdd : TileSet) : number {
@@ -88,6 +102,22 @@ export class SceneGraph {
         return null;
     }
 
+    public static setMoveUp(b : boolean){
+        this.moveUp = b;
+    }
+
+    public static setMoveDown(b : boolean){
+        this.moveDown = b;
+    }
+
+    public static setMoveLeft(b : boolean){
+        this.moveLeft = b;
+    }
+
+    public static setMoveRight(b : boolean){
+        this.moveRight = b;
+    }
+
     /**
      * update
      * 
@@ -101,6 +131,19 @@ export class SceneGraph {
         for (let sprite of this.animatedSprites) {
             sprite.update(delta);
         }
+        if(SceneGraph.moveUp){
+            this.upPos += 1;
+        }
+        if(SceneGraph.moveDown){
+            this.downPos += 1;
+        }
+        if(SceneGraph.moveLeft){
+            this.leftPos += 1;
+        }
+        if(SceneGraph.moveRight){
+            this.rightPos += 1;
+        }
+        this.viewport.setPosition((this.rightPos - this.leftPos), (this.upPos - this.downPos));
     }
 
     public scope() : Array<SceneObject> {
@@ -109,7 +152,14 @@ export class SceneGraph {
 
         // PUT ALL THE SCENE OBJECTS INTO THE VISIBLE SET
         for (let sprite of this.animatedSprites) {
-            this.visibleSet.push(sprite);
+            let spriteType = sprite.getSpriteType();
+            let spriteWidth : number = spriteType.getSpriteWidth();
+            let spriteHeight : number = spriteType.getSpriteHeight();
+            let spriteXInPixels : number = sprite.getPosition().getX() + (spriteWidth) + this.viewport.getX();
+            let spriteYInPixels : number = sprite.getPosition().getY() + (spriteHeight) + this.viewport.getY();
+            if(spriteXInPixels > 0){
+                this.visibleSet.push(sprite);
+            }
         }
 
         return this.visibleSet;
