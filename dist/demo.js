@@ -2388,7 +2388,7 @@ var SceneGraph = function () {
                     var spriteHeight = spriteType.getSpriteHeight();
                     var spriteXInPixels = sprite.getPosition().getX() + spriteWidth + this.viewport.getX();
                     var spriteYInPixels = sprite.getPosition().getY() + spriteHeight + this.viewport.getY();
-                    if (spriteXInPixels > 0) {
+                    if (spriteXInPixels > 0 && spriteXInPixels < this.viewport.getWidth() + spriteWidth && spriteYInPixels > 0 && spriteYInPixels < this.viewport.getHeight() + spriteHeight) {
                         this.visibleSet.push(sprite);
                     }
                 }
