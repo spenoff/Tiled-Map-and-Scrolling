@@ -24,8 +24,14 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
     var worldWidth = world[0].getColumns() * world[0].getTileSet().getTileWidth();
     var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
     for (var i = 0; i < 100; i++) {
-        var type = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
-        var randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "FORWARD");
+        //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
+        var type = void 0;
+        if (i < 50) {
+            type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
+        } else {
+            type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
+        }
+        var randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING");
         var randomX = Math.random() * worldWidth;
         var randomY = Math.random() * worldHeight;
         randomSprite.getPosition().set(randomX, randomY, 0, 1);

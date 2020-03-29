@@ -8,6 +8,8 @@
     ],
     "spriteTypePaths" : [
         {"name":"MULTI_COLOR_BLOCK", "path" : "resources/animated_sprites/MultiColorBlock/MultiColorBlock.json"},
-        {"name":"RED_CIRCLE_MAN", "path" : "resources/animated_sprites/RedCircleMan/RedCircleMan.json" }
+        {"name":"RED_CIRCLE_MAN", "path" : "resources/animated_sprites/RedCircleMan/RedCircleMan.json" },
+        {"name":"BUG_ONE", "path" : "resources/animated_sprites/BugOne/bee_larvae2.json" },
+        {"name":"BUG_TWO", "path" : "resources/animated_sprites/BugTwo/fly.json" }
     ]
 }

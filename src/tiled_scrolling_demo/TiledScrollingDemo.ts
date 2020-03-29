@@ -29,8 +29,14 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
     let worldWidth : number = world[0].getColumns() * world[0].getTileSet().getTileWidth();
     let worldHeight : number = world[0].getRows() * world[0].getTileSet().getTileHeight();
     for (let i = 0; i < 100; i++) {
-        let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
-        let randomSprite : AnimatedSprite = new AnimatedSprite(type, "FORWARD");
+        //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
+        let type : AnimatedSpriteType;
+        if(i < 50) {
+            type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
+        } else {
+            type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
+        }
+        let randomSprite : AnimatedSprite = new AnimatedSprite(type, "DANCING");
         let randomX : number = Math.random() * worldWidth;
         let randomY : number = Math.random() * worldHeight;
         randomSprite.getPosition().set(randomX, randomY, 0, 1);
