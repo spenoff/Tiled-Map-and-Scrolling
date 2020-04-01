@@ -14,6 +14,7 @@ export class SceneGraph {
     // SCENE GRAPH IS QUITE SIMPLE, SO THIS IS THE SAME AS
     // OUR LIST OF ANIMATED SPRITES
     private visibleSet : Array<SceneObject>;
+    private mainCharacter : AnimatedSprite;
 
     // WE ARE ALSO USING A TILING ENGINE FOR RENDERING OUR LEVEL
     // NOTE THAT WE MANAGE THIS HERE BECAUSE WE MAY INVOLVE THE TILED
@@ -92,6 +93,9 @@ export class SceneGraph {
 
     public addAnimatedSprite(sprite : AnimatedSprite) : void {
         this.animatedSprites.push(sprite);
+    }
+    public setMainCharacter(sprite : AnimatedSprite) : void {
+        this.mainCharacter = sprite;
     }
 
     public getSpriteAt(testX : number, testY : number) : AnimatedSprite {

@@ -33,15 +33,26 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
         let type : AnimatedSpriteType;
         if(i < 50) {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-        } else {
+        } else if (i < 100) {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-        }
+         }//else{
+        //     type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
+        // }
         let randomSprite : AnimatedSprite = new AnimatedSprite(type, "DANCING");
         let randomX : number = Math.random() * worldWidth;
         let randomY : number = Math.random() * worldHeight;
         randomSprite.getPosition().set(randomX, randomY, 0, 1);
         game.getSceneGraph().addAnimatedSprite(randomSprite);
+        //if(i == 100){ game.getSceneGraph().setMainCharacter(randomSprite); }
     }
+    //add the main character
+    let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
+    let main_bug : AnimatedSprite = new AnimatedSprite(type, "IDLE");
+    let randomX : number = Math.random() * worldWidth;
+    let randomY : number = Math.random() * worldHeight;
+    main_bug.getPosition().set(randomX, randomY, 0, 1);
+    game.getSceneGraph().addAnimatedSprite(main_bug);
+    game.getSceneGraph().setMainCharacter(main_bug);
 
     // NOW ADD TEXT RENDERING. WE ARE GOING TO RENDER 3 THINGS:
         // NUMBER OF SPRITES IN THE SCENE

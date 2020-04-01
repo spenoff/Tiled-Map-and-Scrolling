@@ -25,18 +25,29 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
     var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
     for (var i = 0; i < 100; i++) {
         //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
-        var type = void 0;
+        var _type = void 0;
         if (i < 50) {
-            type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-        } else {
-            type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-        }
-        var randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING");
-        var randomX = Math.random() * worldWidth;
-        var randomY = Math.random() * worldHeight;
-        randomSprite.getPosition().set(randomX, randomY, 0, 1);
+            _type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
+        } else if (i < 100) {
+            _type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
+        } //else{
+        //     type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
+        // }
+        var randomSprite = new AnimatedSprite_1.AnimatedSprite(_type, "DANCING");
+        var _randomX = Math.random() * worldWidth;
+        var _randomY = Math.random() * worldHeight;
+        randomSprite.getPosition().set(_randomX, _randomY, 0, 1);
         game.getSceneGraph().addAnimatedSprite(randomSprite);
+        //if(i == 100){ game.getSceneGraph().setMainCharacter(randomSprite); }
     }
+    //add the main character
+    var type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
+    var main_bug = new AnimatedSprite_1.AnimatedSprite(type, "IDLE");
+    var randomX = Math.random() * worldWidth;
+    var randomY = Math.random() * worldHeight;
+    main_bug.getPosition().set(randomX, randomY, 0, 1);
+    game.getSceneGraph().addAnimatedSprite(main_bug);
+    game.getSceneGraph().setMainCharacter(main_bug);
     // NOW ADD TEXT RENDERING. WE ARE GOING TO RENDER 3 THINGS:
     // NUMBER OF SPRITES IN THE SCENE
     // LOCATION IN GAME WORLD OF VIEWPORT
@@ -2057,6 +2068,7 @@ var WebGLGameSpriteRenderer = function (_WebGLGameRenderingCo) {
             var scaleX = 2 * spriteWidth / defaultWidth;
             var scaleY = 2 * spriteHeight / defaultHeight;
             this.meshScale.set(scaleX, scaleY, 0.0, 0.0); //1.0, 1.0);
+            //this.meshRotate.set(0, 0, (3.14/4), 0);
             // @todo - COMBINE THIS WITH THE ROTATE AND SCALE VALUES FROM THE SPRITE
             MathUtilities_1.MathUtilities.identity(this.meshTransform);
             MathUtilities_1.MathUtilities.model(this.meshTransform, this.meshTranslate, this.meshRotate, this.meshScale);
@@ -2292,6 +2304,11 @@ var SceneGraph = function () {
         key: "addAnimatedSprite",
         value: function addAnimatedSprite(sprite) {
             this.animatedSprites.push(sprite);
+        }
+    }, {
+        key: "setMainCharacter",
+        value: function setMainCharacter(sprite) {
+            this.mainCharacter = sprite;
         }
     }, {
         key: "getSpriteAt",
