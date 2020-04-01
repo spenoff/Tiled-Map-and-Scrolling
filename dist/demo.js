@@ -2249,6 +2249,7 @@ var SceneGraph = function () {
             this.downPos = 0;
             this.leftPos = 0;
             this.rightPos = 0;
+            //this.mainCharacter = null;
         }
     }, {
         key: "addTileSet",
@@ -2309,6 +2310,11 @@ var SceneGraph = function () {
         key: "setMainCharacter",
         value: function setMainCharacter(sprite) {
             this.mainCharacter = sprite;
+        }
+    }, {
+        key: "getMainCharacter",
+        value: function getMainCharacter() {
+            return this.mainCharacter;
         }
     }, {
         key: "getSpriteAt",
@@ -3015,6 +3021,12 @@ var UIController = function UIController(canvasId, initScene) {
     this.mouseMoveHandler = function (event) {
         if (_this.spriteToDrag != null) {
             _this.spriteToDrag.getPosition().set(event.clientX + _this.dragOffsetX, event.clientY + _this.dragOffsetY, _this.spriteToDrag.getPosition().getZ(), _this.spriteToDrag.getPosition().getW());
+        }
+        var main_character;
+        main_character = _this.scene.getMainCharacter();
+        console.log(main_character == null);
+        if (main_character != null) {
+            main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth() / 2, event.clientY - main_character.getSpriteType().getSpriteHeight() / 2, main_character.getPosition().getZ(), main_character.getPosition().getW());
         }
     };
     this.mouseUpHandler = function (event) {

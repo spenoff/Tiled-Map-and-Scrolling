@@ -49,6 +49,7 @@ export class SceneGraph {
         this.downPos = 0;
         this.leftPos = 0;
         this.rightPos = 0;
+        //this.mainCharacter = null;
     }
 
     public addTileSet(tileSetToAdd : TileSet) : number {
@@ -94,8 +95,13 @@ export class SceneGraph {
     public addAnimatedSprite(sprite : AnimatedSprite) : void {
         this.animatedSprites.push(sprite);
     }
+
     public setMainCharacter(sprite : AnimatedSprite) : void {
         this.mainCharacter = sprite;
+    }
+
+    public getMainCharacter() : AnimatedSprite {
+        return this.mainCharacter;
     }
 
     public getSpriteAt(testX : number, testY : number) : AnimatedSprite {

@@ -76,6 +76,15 @@ export class UIController {
                                                 this.spriteToDrag.getPosition().getZ(), 
                                                 this.spriteToDrag.getPosition().getW());
         }
+        var main_character : AnimatedSprite;
+        main_character = this.scene.getMainCharacter();
+        console.log(main_character == null);
+        if(main_character != null) {
+             main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth()/2, 
+                                              event.clientY - main_character.getSpriteType().getSpriteHeight()/2, 
+                                              main_character.getPosition().getZ(), 
+                                              main_character.getPosition().getW());
+        }
     }
 
     public mouseUpHandler = (event : MouseEvent) : void => {
