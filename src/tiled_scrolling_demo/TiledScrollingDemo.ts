@@ -31,23 +31,22 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
     for (let i = 0; i < 100; i++) {
         //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
         let type : AnimatedSpriteType;
+        let randomSprite : AnimatedSprite;
         if(i < 50) {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-        } else if (i < 100) {
+            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_ONE");
+        } else {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-         }//else{
-        //     type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-        // }
-        let randomSprite : AnimatedSprite = new AnimatedSprite(type, "DANCING");
+            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_TWO");
+        }
         let randomX : number = Math.random() * worldWidth;
         let randomY : number = Math.random() * worldHeight;
         randomSprite.getPosition().set(randomX, randomY, 0, 1);
         game.getSceneGraph().addAnimatedSprite(randomSprite);
-        //if(i == 100){ game.getSceneGraph().setMainCharacter(randomSprite); }
     }
     //add the main character
     let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-    let main_bug : AnimatedSprite = new AnimatedSprite(type, "IDLE");
+    let main_bug : AnimatedSprite = new AnimatedSprite(type, "IDLE", "MAIN_BUG");
     let randomX : number = Math.random() * worldWidth;
     let randomY : number = Math.random() * worldHeight;
     main_bug.getPosition().set(randomX, randomY, 0, 1);

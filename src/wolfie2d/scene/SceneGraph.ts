@@ -96,6 +96,10 @@ export class SceneGraph {
         this.animatedSprites.push(sprite);
     }
 
+    public getAnimatedSprites() : Array<AnimatedSprite> {
+        return this.animatedSprites;
+    }
+
     public setMainCharacter(sprite : AnimatedSprite) : void {
         this.mainCharacter = sprite;
     }

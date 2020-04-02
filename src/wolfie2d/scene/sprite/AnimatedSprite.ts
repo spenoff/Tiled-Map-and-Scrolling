@@ -4,12 +4,15 @@ import {AnimatedSpriteType} from './AnimatedSpriteType'
 export class AnimatedSprite extends SceneObject {
     private spriteType : AnimatedSpriteType;
     private state : string;
+    private type_name : string;
     private animationFrameIndex : number;
     private frameCounter : number;
+    private deadFrame: number;
     
-    public constructor(initSpriteType : AnimatedSpriteType, initState : string) {
+    public constructor(initSpriteType : AnimatedSpriteType, initState : string, initTypeName : string) {
         super();
         this.spriteType = initSpriteType;
+        this.type_name = initTypeName;
         
         // START RESET
         this.state = initState;
@@ -32,6 +35,10 @@ export class AnimatedSprite extends SceneObject {
     public getState() : string {
         return this.state;
     }
+
+    public getTypeName() : string {
+        return this.type_name;
+    }
     
     public setState(initState : string) : void {
         this.state = initState;
@@ -48,6 +55,9 @@ export class AnimatedSprite extends SceneObject {
         if (this.frameCounter > (currentFrame.duration)) {
             this.animationFrameIndex++;
             if (this.animationFrameIndex >= currentAnimation.length) {
+                if(this.state == "DYING"){
+                    this.state = "DEAD";
+                }
                 this.animationFrameIndex = 0;
             }
             this.frameCounter = 0;

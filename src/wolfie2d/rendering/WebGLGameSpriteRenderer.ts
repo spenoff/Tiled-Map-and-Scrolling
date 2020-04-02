@@ -6,18 +6,20 @@ import {WebGLGameTexture} from './WebGLGameTexture'
 import {Viewport} from '../scene/Viewport'
 
 export class WebGLGameSpriteRenderer extends WebGLGameRenderingComponent {
+    protected vertexData : Float32Array;
 
     public constructor() {
         super();
-    }
-
-    public getVertexData() : Float32Array {
-        return new Float32Array([
+        this.vertexData = new Float32Array([
             -0.5,  0.5, 0.0, 0.0,
             -0.5, -0.5, 0.0, 1.0,
              0.5,  0.5, 1.0, 0.0,
              0.5, -0.5, 1.0, 1.0
         ]);
+    }
+
+    public getVertexData() : Float32Array {
+        return this.vertexData;
     }
     public getShaderAttributeNames() : string[] {
         return [this.A_POSITION, this.A_TEX_COORD];
