@@ -11,6 +11,7 @@ import {Viewport} from '../wolfie2d/scene/Viewport'
 import {TextToRender, TextRenderer} from '../wolfie2d/rendering/TextRenderer'
 import { BugOneBehavior } from '../wolfie2d/ai/BugOneBehavior'
 import { MainCharacterBehavior } from '../wolfie2d/ai/MainCharacterBehavior'
+import { BugTwoBehavior } from '../wolfie2d/ai/BugTwoBehavior'
 
 // THIS IS THE ENTRY POINT INTO OUR APPLICATION, WE MAKE
 // THE Game OBJECT AND INITIALIZE IT WITH THE CANVASES
@@ -41,7 +42,6 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
     game.getSceneGraph().setMainCharacter(main_bug);
 
     for (let i = 0; i < 100; i++) {
-        //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
         let type : AnimatedSpriteType;
         let randomSprite : AnimatedSprite;
         if(i < 50) {
@@ -49,7 +49,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
             randomSprite = new AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior());
         } else {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_TWO", new MainCharacterBehavior());
+            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_TWO", new BugTwoBehavior(main_bug, game.getSceneGraph()));
         }
         let randomX : number = Math.random() * worldWidth;
         let randomY : number = Math.random() * worldHeight;

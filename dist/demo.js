@@ -11,6 +11,7 @@ var AnimatedSprite_1 = require("../wolfie2d/scene/sprite/AnimatedSprite");
 var TextRenderer_1 = require("../wolfie2d/rendering/TextRenderer");
 var BugOneBehavior_1 = require("../wolfie2d/ai/BugOneBehavior");
 var MainCharacterBehavior_1 = require("../wolfie2d/ai/MainCharacterBehavior");
+var BugTwoBehavior_1 = require("../wolfie2d/ai/BugTwoBehavior");
 // THIS IS THE ENTRY POINT INTO OUR APPLICATION, WE MAKE
 // THE Game OBJECT AND INITIALIZE IT WITH THE CANVASES
 var game = new Game_1.Game("game_canvas", "text_canvas");
@@ -34,7 +35,6 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
     game.getSceneGraph().addAnimatedSprite(main_bug);
     game.getSceneGraph().setMainCharacter(main_bug);
     for (var i = 0; i < 100; i++) {
-        //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
         var type = void 0;
         var randomSprite = void 0;
         if (i < 50) {
@@ -42,7 +42,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
             randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior_1.BugOneBehavior());
         } else {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-            randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_TWO", new MainCharacterBehavior_1.MainCharacterBehavior());
+            randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_TWO", new BugTwoBehavior_1.BugTwoBehavior(main_bug, game.getSceneGraph()));
         }
         var randomX = Math.random() * worldWidth;
         var randomY = Math.random() * worldHeight;
@@ -76,7 +76,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
     game.start();
 });
 
-},{"../wolfie2d/Game":2,"../wolfie2d/ai/BugOneBehavior":3,"../wolfie2d/ai/MainCharacterBehavior":4,"../wolfie2d/rendering/TextRenderer":12,"../wolfie2d/scene/sprite/AnimatedSprite":22}],2:[function(require,module,exports){
+},{"../wolfie2d/Game":2,"../wolfie2d/ai/BugOneBehavior":3,"../wolfie2d/ai/BugTwoBehavior":4,"../wolfie2d/ai/MainCharacterBehavior":5,"../wolfie2d/rendering/TextRenderer":13,"../wolfie2d/scene/sprite/AnimatedSprite":23}],2:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -259,7 +259,7 @@ var Game = function (_GameLoopTemplate_1$G) {
 
 exports.Game = Game;
 
-},{"../wolfie2d/rendering/TextRenderer":12,"./files/ResourceManager":6,"./loop/GameLoopTemplate":7,"./physics/GamePhysics":11,"./rendering/WebGLGameRenderingSystem":14,"./scene/SceneGraph":19,"./scene/Viewport":21,"./ui/UIController":26}],3:[function(require,module,exports){
+},{"../wolfie2d/rendering/TextRenderer":13,"./files/ResourceManager":7,"./loop/GameLoopTemplate":8,"./physics/GamePhysics":12,"./rendering/WebGLGameRenderingSystem":15,"./scene/SceneGraph":20,"./scene/Viewport":22,"./ui/UIController":27}],3:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -343,7 +343,89 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
 
 exports.BugOneBehavior = BugOneBehavior;
 
-},{"./SpriteBehavior":5}],4:[function(require,module,exports){
+},{"./SpriteBehavior":6}],4:[function(require,module,exports){
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var SpriteBehavior_1 = require("./SpriteBehavior");
+
+var BugTwoBehavior = function (_SpriteBehavior_1$Spr) {
+    _inherits(BugTwoBehavior, _SpriteBehavior_1$Spr);
+
+    function BugTwoBehavior(init_main_sprite, init_scene_graph) {
+        _classCallCheck(this, BugTwoBehavior);
+
+        var _this = _possibleConstructorReturn(this, (BugTwoBehavior.__proto__ || Object.getPrototypeOf(BugTwoBehavior)).call(this));
+
+        _this.current_direction = "UP";
+        _this.frames_until_change = 50;
+        _this.main_sprite = init_main_sprite;
+        _this.sceneGraph = init_scene_graph;
+        return _this;
+    }
+
+    _createClass(BugTwoBehavior, [{
+        key: "update",
+        value: function update() {
+            if (this.getSprite() == null) {
+                return;
+            }
+            if (this.getSprite().getState() == "DYING" || this.getSprite().getState() == "DEAD") {
+                return;
+            }
+            //Check if the main character is nearby
+            //distance = ((x2-x1)^2 + (y2-y1)^2)^0.5
+            var distance = Math.sqrt(Math.pow(this.main_sprite.getPosition().getX() - this.sceneGraph.getViewport().getX() - (this.getSprite().getPosition().getX() - this.sceneGraph.getViewport().getX()), 2) + Math.pow(this.main_sprite.getPosition().getY() - this.sceneGraph.getViewport().getY() - (this.getSprite().getPosition().getY() - this.sceneGraph.getViewport().getY()), 2));
+            if (distance <= 50 + this.getSprite().getSpriteType().getSpriteWidth() / 2 + this.main_sprite.getSpriteType().getSpriteWidth() / 2) {
+                if (this.main_sprite.getPosition().getX() < this.getSprite().getPosition().getX()) {
+                    this.moveRight();
+                } else if (this.main_sprite.getPosition().getX() > this.getSprite().getPosition().getX()) {
+                    this.moveLeft();
+                }
+                if (this.main_sprite.getPosition().getY() < this.getSprite().getPosition().getY()) {
+                    this.moveUp();
+                } else if (this.main_sprite.getPosition().getY() > this.getSprite().getPosition().getY()) {
+                    this.moveDown();
+                }
+                return;
+            }
+            switch (this.current_direction) {
+                case "UP":
+                    this.moveUp();
+                    break;
+                case "DOWN":
+                    this.moveDown();
+                    break;
+                case "LEFT":
+                    this.moveLeft();
+                    break;
+                case "RIGHT":
+                    this.moveRight();
+                    break;
+            }
+            this.frames_until_change--;
+            if (this.frames_until_change == 0) {
+                //TODO Make sure it doesn't leave the map
+                this.current_direction = this.current_direction == "UP" ? "DOWN" : "UP";
+                this.frames_until_change = 50;
+            }
+        }
+    }]);
+
+    return BugTwoBehavior;
+}(SpriteBehavior_1.SpriteBehavior);
+
+exports.BugTwoBehavior = BugTwoBehavior;
+
+},{"./SpriteBehavior":6}],5:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -376,7 +458,7 @@ var MainCharacterBehavior = function (_SpriteBehavior_1$Spr) {
 
 exports.MainCharacterBehavior = MainCharacterBehavior;
 
-},{"./SpriteBehavior":5}],5:[function(require,module,exports){
+},{"./SpriteBehavior":6}],6:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -429,7 +511,7 @@ var SpriteBehavior = function () {
 
 exports.SpriteBehavior = SpriteBehavior;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -796,7 +878,7 @@ var ResourceManager = function () {
 
 exports.ResourceManager = ResourceManager;
 
-},{"../rendering/WebGLGameTexture":17,"../scene/sprite/AnimatedSpriteType":23,"../scene/tiles/TileSet":24,"../scene/tiles/TiledLayer":25}],7:[function(require,module,exports){
+},{"../rendering/WebGLGameTexture":18,"../scene/sprite/AnimatedSpriteType":24,"../scene/tiles/TileSet":25,"../scene/tiles/TiledLayer":26}],8:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1279,7 +1361,7 @@ var GameLoopTemplate = function () {
 
 exports.GameLoopTemplate = GameLoopTemplate;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1579,7 +1661,7 @@ var MathUtilities;
     MathUtilities.subtractVectors = subtractVectors;
 })(MathUtilities = exports.MathUtilities || (exports.MathUtilities = {}));
 
-},{"./Matrix":9}],9:[function(require,module,exports){
+},{"./Matrix":10}],10:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1677,7 +1759,7 @@ var Matrix = function () {
 
 exports.Matrix = Matrix;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1815,7 +1897,7 @@ var Vector3 = function () {
 
 exports.Vector3 = Vector3;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1838,7 +1920,7 @@ var GamePhysics = function () {
             // HAS A BOUNDING VOLUME LIKE EITHER AN AABB OR A CIRCLE
             //Collision detection
             var main_character = sceneGraph.getMainCharacter();
-            var main_character_radius = Math.pow(Math.pow(main_character.getSpriteType().getSpriteWidth() / 2, 2) + Math.pow(main_character.getSpriteType().getSpriteHeight() / 2, 2), 0.5);
+            var main_character_radius = Math.pow(Math.pow(main_character.getSpriteType().getSpriteWidth() / 4, 2) + Math.pow(main_character.getSpriteType().getSpriteHeight() / 4, 2), 0.5);
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -1850,7 +1932,7 @@ var GamePhysics = function () {
                     if (main_character != null && sprite.getTypeName() != "MAIN_BUG") {
                         //distance = ((x2-x1)^2 + (y2-y1)^2)^0.5
                         var distance = Math.sqrt(Math.pow(main_character.getPosition().getX() - sceneGraph.getViewport().getX() - (sprite.getPosition().getX() - sceneGraph.getViewport().getX()), 2) + Math.pow(main_character.getPosition().getY() - sceneGraph.getViewport().getY() - (sprite.getPosition().getY() - sceneGraph.getViewport().getY()), 2));
-                        var sprite_radius = Math.pow(Math.pow(sprite.getSpriteType().getSpriteWidth() / 2, 2) + Math.pow(sprite.getSpriteType().getSpriteHeight() / 2, 2), 0.5);
+                        var sprite_radius = Math.pow(Math.pow(sprite.getSpriteType().getSpriteWidth() / 16, 2) + Math.pow(sprite.getSpriteType().getSpriteHeight() / 16, 2), 0.5);
                         if (distance <= main_character_radius + sprite_radius) {
                             //We have a collision
                             if (sprite.getTypeName() == "BUG_ONE" && sprite.getState() != "DYING" && sprite.getState() != "DEAD") {
@@ -1881,7 +1963,7 @@ var GamePhysics = function () {
 
 exports.GamePhysics = GamePhysics;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1967,7 +2049,7 @@ var TextRenderer = function () {
 
 exports.TextRenderer = TextRenderer;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2061,7 +2143,7 @@ var WebGLGameRenderingComponent = function () {
 
 exports.WebGLGameRenderingComponent = WebGLGameRenderingComponent;
 
-},{"../math/Matrix":9,"../math/Vector3":10,"./WebGLGameShader":15}],14:[function(require,module,exports){
+},{"../math/Matrix":10,"../math/Vector3":11,"./WebGLGameShader":16}],15:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2209,7 +2291,7 @@ var WebGLGameRenderingSystem = function () {
 
 exports.WebGLGameRenderingSystem = WebGLGameRenderingSystem;
 
-},{"./TextRenderer":12,"./WebGLGameSpriteRenderer":16,"./WebGLGameTiledLayerRenderer":18}],15:[function(require,module,exports){
+},{"./TextRenderer":13,"./WebGLGameSpriteRenderer":17,"./WebGLGameTiledLayerRenderer":19}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2285,7 +2367,7 @@ var WebGLGameShader = function () {
 
 exports.WebGLGameShader = WebGLGameShader;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2422,7 +2504,7 @@ var WebGLGameSpriteRenderer = function (_WebGLGameRenderingCo) {
 
 exports.WebGLGameSpriteRenderer = WebGLGameSpriteRenderer;
 
-},{"../math/MathUtilities":8,"./WebGLGameRenderingComponent":13}],17:[function(require,module,exports){
+},{"../math/MathUtilities":9,"./WebGLGameRenderingComponent":14}],18:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2435,7 +2517,7 @@ var WebGLGameTexture = function WebGLGameTexture() {
 
 exports.WebGLGameTexture = WebGLGameTexture;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2535,7 +2617,7 @@ var WebGLGameTiledLayerRenderer = function (_WebGLGameRenderingCo) {
 
 exports.WebGLGameTiledLayerRenderer = WebGLGameTiledLayerRenderer;
 
-},{"./WebGLGameRenderingComponent":13}],19:[function(require,module,exports){
+},{"./WebGLGameRenderingComponent":14}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2784,7 +2866,7 @@ var SceneGraph = function () {
 
 exports.SceneGraph = SceneGraph;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2837,7 +2919,7 @@ var SceneObject = function () {
 
 exports.SceneObject = SceneObject;
 
-},{"../math/Vector3":10}],21:[function(require,module,exports){
+},{"../math/Vector3":11}],22:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2895,7 +2977,7 @@ var Viewport = function () {
 
 exports.Viewport = Viewport;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3019,7 +3101,7 @@ var AnimatedSprite = function (_SceneObject_1$SceneO) {
 
 exports.AnimatedSprite = AnimatedSprite;
 
-},{"../SceneObject":20}],23:[function(require,module,exports){
+},{"../SceneObject":21}],24:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3103,7 +3185,7 @@ var AnimatedSpriteType = function () {
 
 exports.AnimatedSpriteType = AnimatedSpriteType;
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3185,7 +3267,7 @@ var TileSet = function () {
 
 exports.TileSet = TileSet;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3294,7 +3376,7 @@ var TiledLayer = function () {
 
 exports.TiledLayer = TiledLayer;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3377,6 +3459,6 @@ var UIController = function UIController(canvasId, initScene) {
 
 exports.UIController = UIController;
 
-},{"../scene/SceneGraph":19}]},{},[1])
+},{"../scene/SceneGraph":20}]},{},[1])
 
 //# sourceMappingURL=demo.js.map
