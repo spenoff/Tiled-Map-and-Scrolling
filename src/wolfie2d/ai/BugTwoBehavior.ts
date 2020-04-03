@@ -24,7 +24,9 @@ export class BugTwoBehavior extends SpriteBehavior{
         //distance = ((x2-x1)^2 + (y2-y1)^2)^0.5
         let distance = Math.sqrt((Math.pow(((this.main_sprite.getPosition().getX() - this.sceneGraph.getViewport().getX()) - (this.getSprite().getPosition().getX() - this.sceneGraph.getViewport().getX())), 2)
         + Math.pow(((this.main_sprite.getPosition().getY() - this.sceneGraph.getViewport().getY()) - (this.getSprite().getPosition().getY() - this.sceneGraph.getViewport().getY())), 2)));
-        if(distance <= 50 + this.getSprite().getSpriteType().getSpriteWidth()/2 + this.main_sprite.getSpriteType().getSpriteWidth()/2) {
+        let main_character_radius = Math.pow(Math.pow(this.main_sprite.getSpriteType().getSpriteWidth()/2, 2) + Math.pow(this.main_sprite.getSpriteType().getSpriteHeight()/2, 2), 0.5);
+        let bug_radius = Math.pow(Math.pow(this.getSprite().getSpriteType().getSpriteWidth()/4, 2) + Math.pow(this.getSprite().getSpriteType().getSpriteHeight()/4, 2), 0.5);
+        if(distance <= 50 + main_character_radius + bug_radius) {
             if(this.main_sprite.getPosition().getX() < this.getSprite().getPosition().getX()) {
                 this.moveRight();
             }else if(this.main_sprite.getPosition().getX() > this.getSprite().getPosition().getX()) {
