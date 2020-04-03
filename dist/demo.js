@@ -25,30 +25,30 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
     var world = game.getSceneGraph().getTiledLayers();
     var worldWidth = world[0].getColumns() * world[0].getTileSet().getTileWidth();
     var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
-    for (var i = 0; i < 100; i++) {
-        //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
-        var _type = void 0;
-        var randomSprite = void 0;
-        if (i < 50) {
-            _type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-            randomSprite = new AnimatedSprite_1.AnimatedSprite(_type, "DANCING", "BUG_ONE", new BugOneBehavior_1.BugOneBehavior());
-        } else {
-            _type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-            randomSprite = new AnimatedSprite_1.AnimatedSprite(_type, "DANCING", "BUG_TWO", new MainCharacterBehavior_1.MainCharacterBehavior());
-        }
-        var _randomX = Math.random() * worldWidth;
-        var _randomY = Math.random() * worldHeight;
-        randomSprite.getPosition().set(_randomX, _randomY, 0, 1);
-        game.getSceneGraph().addAnimatedSprite(randomSprite);
-    }
     //add the main character
-    var type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-    var main_bug = new AnimatedSprite_1.AnimatedSprite(type, "IDLE", "MAIN_BUG", new MainCharacterBehavior_1.MainCharacterBehavior());
-    var randomX = Math.random() * worldWidth;
-    var randomY = Math.random() * worldHeight;
-    main_bug.getPosition().set(randomX, randomY, 0, 1);
+    var mc_type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
+    var main_bug = new AnimatedSprite_1.AnimatedSprite(mc_type, "IDLE", "MAIN_BUG", new MainCharacterBehavior_1.MainCharacterBehavior());
+    var mc_randomX = Math.random() * worldWidth;
+    var mc_randomY = Math.random() * worldHeight;
+    main_bug.getPosition().set(mc_randomX, mc_randomY, 0, 1);
     game.getSceneGraph().addAnimatedSprite(main_bug);
     game.getSceneGraph().setMainCharacter(main_bug);
+    for (var i = 0; i < 100; i++) {
+        //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
+        var type = void 0;
+        var randomSprite = void 0;
+        if (i < 50) {
+            type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
+            randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior_1.BugOneBehavior());
+        } else {
+            type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
+            randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_TWO", new MainCharacterBehavior_1.MainCharacterBehavior());
+        }
+        var randomX = Math.random() * worldWidth;
+        var randomY = Math.random() * worldHeight;
+        randomSprite.getPosition().set(randomX, randomY, 0, 1);
+        game.getSceneGraph().addAnimatedSprite(randomSprite);
+    }
     // NOW ADD TEXT RENDERING. WE ARE GOING TO RENDER 3 THINGS:
     // NUMBER OF SPRITES IN THE SCENE
     // LOCATION IN GAME WORLD OF VIEWPORT
@@ -297,16 +297,16 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
             }
             switch (this.current_direction) {
                 case "UP":
-                    this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+                    this.moveUp();
                     break;
                 case "DOWN":
-                    this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() - 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+                    this.moveDown();
                     break;
                 case "LEFT":
-                    this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+                    this.moveLeft();
                     break;
                 case "RIGHT":
-                    this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+                    this.moveRight();
                     break;
             }
             this.frames_until_change--;
@@ -319,7 +319,7 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
     }], [{
         key: "random_direction",
         value: function random_direction() {
-            var dur_num = Math.floor(Math.random() * 3);
+            var dur_num = Math.floor(Math.random() * 4);
             switch (dur_num) {
                 case 0:
                     return "UP";
@@ -401,6 +401,26 @@ var SpriteBehavior = function () {
         key: "setSprite",
         value: function setSprite(newSprite) {
             this.sprite = newSprite;
+        }
+    }, {
+        key: "moveUp",
+        value: function moveUp() {
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+        }
+    }, {
+        key: "moveDown",
+        value: function moveDown() {
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() - 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+        }
+    }, {
+        key: "moveLeft",
+        value: function moveLeft() {
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+        }
+    }, {
+        key: "moveRight",
+        value: function moveRight() {
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }]);
 

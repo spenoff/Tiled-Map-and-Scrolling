@@ -15,26 +15,10 @@ export class BugOneBehavior extends SpriteBehavior{
         if(this.getSprite() == null) { return; }
         if(this.getSprite().getState() == "DYING" || this.getSprite().getState() == "DEAD"){ return; }
         switch(this.current_direction) {
-            case "UP": this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), 
-                                                     this.getSprite().getPosition().getY() + 1,
-                                                     this.getSprite().getPosition().getZ(),
-                                                     this.getSprite().getPosition().getW());
-                                                     break;
-            case "DOWN": this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), 
-                                                     this.getSprite().getPosition().getY() - 1,
-                                                     this.getSprite().getPosition().getZ(),
-                                                     this.getSprite().getPosition().getW());
-                                                     break;
-            case "LEFT": this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, 
-                                                     this.getSprite().getPosition().getY(),
-                                                     this.getSprite().getPosition().getZ(),
-                                                     this.getSprite().getPosition().getW());
-                                                     break;
-            case "RIGHT": this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), 
-                                                     this.getSprite().getPosition().getY() + 1,
-                                                     this.getSprite().getPosition().getZ(),
-                                                     this.getSprite().getPosition().getW());
-                                                     break;
+            case "UP": this.moveUp(); break;
+            case "DOWN": this.moveDown(); break;
+            case "LEFT": this.moveLeft(); break;
+            case "RIGHT": this.moveRight(); break;
         }
         this.frames_until_change--;
         if(this.frames_until_change == 0){
@@ -46,7 +30,7 @@ export class BugOneBehavior extends SpriteBehavior{
     }
 
     static random_direction() : string {
-        let dur_num = Math.floor(Math.random() * 3);
+        let dur_num = Math.floor(Math.random() * 4);
         switch(dur_num) {
             case 0: return "UP";
             case 1: return "DOWN";

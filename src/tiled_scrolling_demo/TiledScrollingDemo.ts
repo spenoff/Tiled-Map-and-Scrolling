@@ -30,6 +30,16 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
     let world : TiledLayer[] = game.getSceneGraph().getTiledLayers();
     let worldWidth : number = world[0].getColumns() * world[0].getTileSet().getTileWidth();
     let worldHeight : number = world[0].getRows() * world[0].getTileSet().getTileHeight();
+
+    //add the main character
+    let mc_type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
+    let main_bug : AnimatedSprite = new AnimatedSprite(mc_type, "IDLE", "MAIN_BUG", new MainCharacterBehavior());
+    let mc_randomX : number = Math.random() * worldWidth;
+    let mc_randomY : number = Math.random() * worldHeight;
+    main_bug.getPosition().set(mc_randomX, mc_randomY, 0, 1);
+    game.getSceneGraph().addAnimatedSprite(main_bug);
+    game.getSceneGraph().setMainCharacter(main_bug);
+
     for (let i = 0; i < 100; i++) {
         //let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("RED_CIRCLE_MAN");
         let type : AnimatedSpriteType;
@@ -46,15 +56,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
         randomSprite.getPosition().set(randomX, randomY, 0, 1);
         game.getSceneGraph().addAnimatedSprite(randomSprite);
     }
-    //add the main character
-    let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-    let main_bug : AnimatedSprite = new AnimatedSprite(type, "IDLE", "MAIN_BUG", new MainCharacterBehavior());
-    let randomX : number = Math.random() * worldWidth;
-    let randomY : number = Math.random() * worldHeight;
-    main_bug.getPosition().set(randomX, randomY, 0, 1);
-    game.getSceneGraph().addAnimatedSprite(main_bug);
-    game.getSceneGraph().setMainCharacter(main_bug);
-
+    
     // NOW ADD TEXT RENDERING. WE ARE GOING TO RENDER 3 THINGS:
         // NUMBER OF SPRITES IN THE SCENE
         // LOCATION IN GAME WORLD OF VIEWPORT
