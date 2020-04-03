@@ -9,6 +9,8 @@ import {TiledLayer} from '../wolfie2d/scene/tiles/TiledLayer'
 import {SceneGraph} from '../wolfie2d/scene/SceneGraph'
 import {Viewport} from '../wolfie2d/scene/Viewport'
 import {TextToRender, TextRenderer} from '../wolfie2d/rendering/TextRenderer'
+import { BugOneBehavior } from '../wolfie2d/ai/BugOneBehavior'
+import { MainCharacterBehavior } from '../wolfie2d/ai/MainCharacterBehavior'
 
 // THIS IS THE ENTRY POINT INTO OUR APPLICATION, WE MAKE
 // THE Game OBJECT AND INITIALIZE IT WITH THE CANVASES
@@ -34,10 +36,10 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
         let randomSprite : AnimatedSprite;
         if(i < 50) {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_ONE");
+            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior());
         } else {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
-            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_TWO");
+            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_TWO", new MainCharacterBehavior());
         }
         let randomX : number = Math.random() * worldWidth;
         let randomY : number = Math.random() * worldHeight;
@@ -46,7 +48,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
     }
     //add the main character
     let type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-    let main_bug : AnimatedSprite = new AnimatedSprite(type, "IDLE", "MAIN_BUG");
+    let main_bug : AnimatedSprite = new AnimatedSprite(type, "IDLE", "MAIN_BUG", new MainCharacterBehavior());
     let randomX : number = Math.random() * worldWidth;
     let randomY : number = Math.random() * worldHeight;
     main_bug.getPosition().set(randomX, randomY, 0, 1);

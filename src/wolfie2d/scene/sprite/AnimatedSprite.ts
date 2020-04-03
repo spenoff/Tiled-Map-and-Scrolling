@@ -1,5 +1,6 @@
 import {SceneObject} from '../SceneObject'
 import {AnimatedSpriteType} from './AnimatedSpriteType'
+import { SpriteBehavior } from '../../ai/SpriteBehavior';
 
 export class AnimatedSprite extends SceneObject {
     private spriteType : AnimatedSpriteType;
@@ -8,11 +9,14 @@ export class AnimatedSprite extends SceneObject {
     private animationFrameIndex : number;
     private frameCounter : number;
     private deadFrame: number;
+    private behavior : SpriteBehavior;
     
-    public constructor(initSpriteType : AnimatedSpriteType, initState : string, initTypeName : string) {
+    public constructor(initSpriteType : AnimatedSpriteType, initState : string, initTypeName : string, initBehavior : SpriteBehavior) {
         super();
         this.spriteType = initSpriteType;
         this.type_name = initTypeName;
+        this.behavior = initBehavior;
+        this.behavior.setSprite(this);
         
         // START RESET
         this.state = initState;
@@ -62,6 +66,7 @@ export class AnimatedSprite extends SceneObject {
             }
             this.frameCounter = 0;
         }
+        this.behavior.update();
     }
 
     public contains(pointX : number, pointY : number) : boolean {
