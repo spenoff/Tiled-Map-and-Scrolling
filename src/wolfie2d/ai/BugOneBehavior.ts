@@ -30,8 +30,8 @@ export class BugOneBehavior extends SpriteBehavior{
                                                      this.getSprite().getPosition().getZ(),
                                                      this.getSprite().getPosition().getW());
                                                      break;
-            case "RIGHT": this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), 
-                                                     this.getSprite().getPosition().getY() + 1,
+            case "RIGHT": this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, 
+                                                     this.getSprite().getPosition().getY(),
                                                      this.getSprite().getPosition().getZ(),
                                                      this.getSprite().getPosition().getW());
                                                      break;
@@ -46,7 +46,7 @@ export class BugOneBehavior extends SpriteBehavior{
     }
 
     static random_direction() : string {
-        let dur_num = Math.floor(Math.random() * 3);
+        let dur_num = Math.floor(Math.random() * 4);
         switch(dur_num) {
             case 0: return "UP";
             case 1: return "DOWN";
