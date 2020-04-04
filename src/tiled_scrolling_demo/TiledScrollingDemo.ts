@@ -46,7 +46,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
         let randomSprite : AnimatedSprite;
         if(i < 50) {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior());
+            randomSprite = new AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior(game.getSceneGraph()));
         } else {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
             randomSprite = new AnimatedSprite(type, "DANCING", "BUG_TWO", new BugTwoBehavior(main_bug, game.getSceneGraph()));
