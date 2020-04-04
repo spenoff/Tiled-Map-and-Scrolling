@@ -145,16 +145,19 @@ export class SceneGraph {
         for (let sprite of this.animatedSprites) {
             sprite.update(delta);
         }
-        if(SceneGraph.moveUp){
+        let world : TiledLayer[] = this.getTiledLayers();
+        let worldWidth : number = world[0].getColumns() * world[0].getTileSet().getTileWidth();
+        let worldHeight : number = world[0].getRows() * world[0].getTileSet().getTileHeight();
+        if(SceneGraph.moveUp && (this.downPos - this.upPos > 0)) {
             this.upPos += 1;
         }
-        if(SceneGraph.moveDown){
+        if(SceneGraph.moveDown && (this.downPos - this.upPos + this.getViewport().getHeight() < worldHeight)) {
             this.downPos += 1;
-        }
-        if(SceneGraph.moveLeft){
+        }//TODO make left and right in this context make more sense
+        if(SceneGraph.moveLeft && (this.leftPos - this.rightPos + this.getViewport().getWidth() < worldWidth)){
             this.leftPos += 1;
         }
-        if(SceneGraph.moveRight){
+        if(SceneGraph.moveRight && (this.leftPos - this.rightPos > 0)){
             this.rightPos += 1;
         }
         this.viewport.setPosition((this.leftPos - this.rightPos), (this.downPos - this.upPos));
