@@ -323,14 +323,19 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
                     this.current_direction = "DOWN";
                 } else if (this.current_direction == "DOWN" && this.getSprite().getPosition().getY() + this.getSprite().getSpriteType().getSpriteHeight() / 2 + this.frames_until_change - this.sceneGraph.getViewport().getY() >= worldHeight) {
                     this.current_direction = "UP";
+                }
+                if (this.current_direction == "LEFT" && this.getSprite().getPosition().getX() - this.getSprite().getSpriteType().getSpriteWidth() / 2 - this.frames_until_change + this.sceneGraph.getViewport().getX() <= 0) {
+                    this.current_direction = "RIGHT";
                     console.log("c");
+                } else if (this.current_direction == "RIGHT" && this.getSprite().getPosition().getX() + this.getSprite().getSpriteType().getSpriteWidth() / 2 + this.frames_until_change - this.sceneGraph.getViewport().getX() >= worldWidth) {
+                    this.current_direction = "LEFT";
                 }
             }
         }
     }], [{
         key: "random_direction",
         value: function random_direction() {
-            //return "DOWN";
+            //return "RIGHT";
             var dur_num = Math.floor(Math.random() * 4);
             switch (dur_num) {
                 case 0:
@@ -511,12 +516,12 @@ var SpriteBehavior = function () {
     }, {
         key: "moveLeft",
         value: function moveLeft() {
-            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveRight",
         value: function moveRight() {
-            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }]);
 
@@ -1934,7 +1939,7 @@ var GamePhysics = function () {
             // HAS A BOUNDING VOLUME LIKE EITHER AN AABB OR A CIRCLE
             //Collision detection
             var main_character = sceneGraph.getMainCharacter();
-            var main_character_radius = Math.pow(Math.pow(main_character.getSpriteType().getSpriteWidth() / 4, 2) + Math.pow(main_character.getSpriteType().getSpriteHeight() / 4, 2), 0.5);
+            var main_character_radius = Math.pow(Math.pow(main_character.getSpriteType().getSpriteWidth() / 3, 2) + Math.pow(main_character.getSpriteType().getSpriteHeight() / 3, 2), 0.5);
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -1945,8 +1950,8 @@ var GamePhysics = function () {
 
                     if (main_character != null && sprite.getTypeName() != "MAIN_BUG") {
                         //distance = ((x2-x1)^2 + (y2-y1)^2)^0.5
-                        var distance = Math.sqrt(Math.pow(main_character.getPosition().getX() - sceneGraph.getViewport().getX() - (sprite.getPosition().getX() - sceneGraph.getViewport().getX()), 2) + Math.pow(main_character.getPosition().getY() - sceneGraph.getViewport().getY() - (sprite.getPosition().getY() - sceneGraph.getViewport().getY()), 2));
-                        var sprite_radius = Math.pow(Math.pow(sprite.getSpriteType().getSpriteWidth() / 16, 2) + Math.pow(sprite.getSpriteType().getSpriteHeight() / 16, 2), 0.5);
+                        var distance = Math.sqrt(Math.pow(main_character.getPosition().getX() + sceneGraph.getViewport().getX() - (sprite.getPosition().getX() + sceneGraph.getViewport().getX()), 2) + Math.pow(main_character.getPosition().getY() + sceneGraph.getViewport().getY() - (sprite.getPosition().getY() + sceneGraph.getViewport().getY()), 2));
+                        var sprite_radius = Math.pow(Math.pow(sprite.getSpriteType().getSpriteWidth() / 9, 2) + Math.pow(sprite.getSpriteType().getSpriteHeight() / 9, 2), 0.5);
                         if (distance <= main_character_radius + sprite_radius) {
                             //We have a collision
                             if (sprite.getTypeName() == "BUG_ONE" && sprite.getState() != "DYING" && sprite.getState() != "DEAD") {
