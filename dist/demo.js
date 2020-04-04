@@ -400,7 +400,7 @@ var BugTwoBehavior = function (_SpriteBehavior_1$Spr) {
             }
             //Check if the main character is nearby
             //distance = ((x2-x1)^2 + (y2-y1)^2)^0.5
-            var distance = Math.sqrt(Math.pow(this.main_sprite.getPosition().getX() - this.sceneGraph.getViewport().getX() - (this.getSprite().getPosition().getX() - this.sceneGraph.getViewport().getX()), 2) + Math.pow(this.main_sprite.getPosition().getY() - this.sceneGraph.getViewport().getY() - (this.getSprite().getPosition().getY() - this.sceneGraph.getViewport().getY()), 2));
+            var distance = Math.sqrt(Math.pow(this.main_sprite.getPosition().getX() + this.sceneGraph.getViewport().getX() - (this.getSprite().getPosition().getX() + this.sceneGraph.getViewport().getX()), 2) + Math.pow(this.main_sprite.getPosition().getY() + this.sceneGraph.getViewport().getY() - (this.getSprite().getPosition().getY() + this.sceneGraph.getViewport().getY()), 2));
             var main_character_radius = Math.pow(Math.pow(this.main_sprite.getSpriteType().getSpriteWidth() / 2, 2) + Math.pow(this.main_sprite.getSpriteType().getSpriteHeight() / 2, 2), 0.5);
             var bug_radius = Math.pow(Math.pow(this.getSprite().getSpriteType().getSpriteWidth() / 4, 2) + Math.pow(this.getSprite().getSpriteType().getSpriteHeight() / 4, 2), 0.5);
             if (distance <= 50 + main_character_radius + bug_radius) {
@@ -410,9 +410,9 @@ var BugTwoBehavior = function (_SpriteBehavior_1$Spr) {
                     this.moveLeft();
                 }
                 if (this.main_sprite.getPosition().getY() < this.getSprite().getPosition().getY()) {
-                    this.moveUp();
-                } else if (this.main_sprite.getPosition().getY() > this.getSprite().getPosition().getY()) {
                     this.moveDown();
+                } else if (this.main_sprite.getPosition().getY() > this.getSprite().getPosition().getY()) {
+                    this.moveUp();
                 }
                 return;
             }
