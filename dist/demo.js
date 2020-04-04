@@ -39,7 +39,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
         var randomSprite = void 0;
         if (i < 50) {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_ONE");
-            randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior_1.BugOneBehavior());
+            randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_ONE", new BugOneBehavior_1.BugOneBehavior(game.getSceneGraph()));
         } else {
             type = game.getResourceManager().getAnimatedSpriteType("BUG_TWO");
             randomSprite = new AnimatedSprite_1.AnimatedSprite(type, "DANCING", "BUG_TWO", new BugTwoBehavior_1.BugTwoBehavior(main_bug, game.getSceneGraph()));
@@ -276,13 +276,14 @@ var SpriteBehavior_1 = require("./SpriteBehavior");
 var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
     _inherits(BugOneBehavior, _SpriteBehavior_1$Spr);
 
-    function BugOneBehavior() {
+    function BugOneBehavior(init_sceneGraph) {
         _classCallCheck(this, BugOneBehavior);
 
         var _this = _possibleConstructorReturn(this, (BugOneBehavior.__proto__ || Object.getPrototypeOf(BugOneBehavior)).call(this));
 
         _this.current_direction = BugOneBehavior.random_direction();
         _this.frames_until_change = BugOneBehavior.random_frame_num();
+        _this.sceneGraph = init_sceneGraph;
         return _this;
     }
 
@@ -311,9 +312,22 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
             }
             this.frames_until_change--;
             if (this.frames_until_change == 0) {
-                //TODO Make sure it doesn't leave the map
                 this.current_direction = BugOneBehavior.random_direction();
                 this.frames_until_change = BugOneBehavior.random_frame_num();
+                //Make sure it doesn't leave the map
+                var world = this.sceneGraph.getTiledLayers();
+                var worldWidth = world[0].getColumns() * world[0].getTileSet().getTileWidth();
+                var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
+                if (this.current_direction == "UP" && this.getSprite().getPosition().getY() - this.getSprite().getSpriteType().getSpriteHeight() - this.frames_until_change <= 0) {
+                    this.current_direction = "DOWN";
+                } else if (this.current_direction == "DOWN" && this.getSprite().getPosition().getY() + this.getSprite().getSpriteType().getSpriteHeight() + this.frames_until_change >= worldHeight) {
+                    this.current_direction = "UP";
+                }
+                if (this.current_direction == "LEFT" && this.getSprite().getPosition().getX() - this.getSprite().getSpriteType().getSpriteWidth() - this.frames_until_change <= 0) {
+                    this.current_direction = "RIGHT";
+                } else if (this.current_direction == "RIGHT" && this.getSprite().getPosition().getX() + this.getSprite().getSpriteType().getSpriteWidth() + this.frames_until_change >= worldWidth) {
+                    this.current_direction = "LEFT";
+                }
             }
         }
     }], [{
@@ -2454,8 +2468,8 @@ var WebGLGameSpriteRenderer = function (_WebGLGameRenderingCo) {
             // CALCULATE HOW MUCH TO TRANSLATE THE QUAD PER THE SPRITE POSITION
             var spriteWidth = spriteType.getSpriteWidth();
             var spriteHeight = spriteType.getSpriteHeight();
-            var spriteXInPixels = sprite.getPosition().getX() + spriteWidth / 2 + viewport.getX();
-            var spriteYInPixels = sprite.getPosition().getY() + spriteHeight / 2 + viewport.getY();
+            var spriteXInPixels = sprite.getPosition().getX() + spriteWidth / 2 - viewport.getX();
+            var spriteYInPixels = sprite.getPosition().getY() + spriteHeight / 2 - viewport.getY();
             var spriteXTranslate = (spriteXInPixels - canvasWidth / 2) / (canvasWidth / 2);
             var spriteYTranslate = (spriteYInPixels - canvasHeight / 2) / (canvasHeight / 2);
             this.meshTranslate.setX(spriteXTranslate);
@@ -2799,7 +2813,7 @@ var SceneGraph = function () {
             if (SceneGraph.moveRight) {
                 this.rightPos += 1;
             }
-            this.viewport.setPosition(this.rightPos - this.leftPos, this.upPos - this.downPos);
+            this.viewport.setPosition(this.leftPos - this.rightPos, this.downPos - this.upPos);
         }
     }, {
         key: "scope",
@@ -3441,7 +3455,7 @@ var UIController = function UIController(canvasId, initScene) {
         main_character = _this.scene.getMainCharacter();
         console.log(main_character == null);
         if (main_character != null) {
-            main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth() / 2 - _this.scene.getViewport().getX(), event.clientY - main_character.getSpriteType().getSpriteHeight() / 2 - _this.scene.getViewport().getY(), main_character.getPosition().getZ(), main_character.getPosition().getW());
+            main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth() / 2 + _this.scene.getViewport().getX(), event.clientY - main_character.getSpriteType().getSpriteHeight() / 2 + _this.scene.getViewport().getY(), main_character.getPosition().getZ(), main_character.getPosition().getW());
         }
     };
     this.mouseUpHandler = function (event) {

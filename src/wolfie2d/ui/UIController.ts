@@ -80,8 +80,8 @@ export class UIController {
         main_character = this.scene.getMainCharacter();
         console.log(main_character == null);
         if(main_character != null) {
-             main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth()/2 - this.scene.getViewport().getX(), 
-                                              event.clientY - main_character.getSpriteType().getSpriteHeight()/2 - this.scene.getViewport().getY(), 
+             main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth()/2 + this.scene.getViewport().getX(), 
+                                              event.clientY - main_character.getSpriteType().getSpriteHeight()/2 + this.scene.getViewport().getY(), 
                                               main_character.getPosition().getZ(), 
                                               main_character.getPosition().getW());
         }

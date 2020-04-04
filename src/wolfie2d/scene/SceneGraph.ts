@@ -157,7 +157,7 @@ export class SceneGraph {
         if(SceneGraph.moveRight){
             this.rightPos += 1;
         }
-        this.viewport.setPosition((this.rightPos - this.leftPos), (this.upPos - this.downPos));
+        this.viewport.setPosition((this.leftPos - this.rightPos), (this.downPos - this.upPos));
     }
 
     public scope() : Array<SceneObject> {
