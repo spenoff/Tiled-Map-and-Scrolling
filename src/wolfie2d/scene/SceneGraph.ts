@@ -169,8 +169,8 @@ export class SceneGraph {
             let spriteType = sprite.getSpriteType();
             let spriteWidth : number = spriteType.getSpriteWidth();
             let spriteHeight : number = spriteType.getSpriteHeight();
-            let spriteXInPixels : number = sprite.getPosition().getX() + (spriteWidth) + this.viewport.getX();
-            let spriteYInPixels : number = sprite.getPosition().getY() + (spriteHeight) + this.viewport.getY();
+            let spriteXInPixels : number = sprite.getPosition().getX() + (spriteWidth) - this.viewport.getX();
+            let spriteYInPixels : number = sprite.getPosition().getY() + (spriteHeight) - this.viewport.getY();
             if(spriteXInPixels > 0 && spriteXInPixels < (this.viewport.getWidth() + spriteWidth)
              && (spriteYInPixels > 0 && spriteYInPixels < (this.viewport.getHeight() + spriteHeight))){
                 this.visibleSet.push(sprite);

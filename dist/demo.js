@@ -312,27 +312,25 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
             }
             this.frames_until_change--;
             if (this.frames_until_change == 0) {
+                //TODO Make sure it doesn't leave the map
                 this.current_direction = BugOneBehavior.random_direction();
                 this.frames_until_change = BugOneBehavior.random_frame_num();
                 //Make sure it doesn't leave the map
                 var world = this.sceneGraph.getTiledLayers();
                 var worldWidth = world[0].getColumns() * world[0].getTileSet().getTileWidth();
                 var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
-                if (this.current_direction == "UP" && this.getSprite().getPosition().getY() - this.getSprite().getSpriteType().getSpriteHeight() - this.frames_until_change <= 0) {
+                if (this.current_direction == "UP" && this.getSprite().getPosition().getY() - this.getSprite().getSpriteType().getSpriteHeight() / 2 - this.frames_until_change + this.sceneGraph.getViewport().getY() <= 0) {
                     this.current_direction = "DOWN";
-                } else if (this.current_direction == "DOWN" && this.getSprite().getPosition().getY() + this.getSprite().getSpriteType().getSpriteHeight() + this.frames_until_change >= worldHeight) {
+                } else if (this.current_direction == "DOWN" && this.getSprite().getPosition().getY() + this.getSprite().getSpriteType().getSpriteHeight() / 2 + this.frames_until_change - this.sceneGraph.getViewport().getY() >= worldHeight) {
                     this.current_direction = "UP";
-                }
-                if (this.current_direction == "LEFT" && this.getSprite().getPosition().getX() - this.getSprite().getSpriteType().getSpriteWidth() - this.frames_until_change <= 0) {
-                    this.current_direction = "RIGHT";
-                } else if (this.current_direction == "RIGHT" && this.getSprite().getPosition().getX() + this.getSprite().getSpriteType().getSpriteWidth() + this.frames_until_change >= worldWidth) {
-                    this.current_direction = "LEFT";
+                    console.log("c");
                 }
             }
         }
     }], [{
         key: "random_direction",
         value: function random_direction() {
+            //return "DOWN";
             var dur_num = Math.floor(Math.random() * 4);
             switch (dur_num) {
                 case 0:
@@ -503,22 +501,22 @@ var SpriteBehavior = function () {
     }, {
         key: "moveUp",
         value: function moveUp() {
-            this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() - 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveDown",
         value: function moveDown() {
-            this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() - 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveLeft",
         value: function moveLeft() {
-            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveRight",
         value: function moveRight() {
-            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+            this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }]);
 
@@ -2832,8 +2830,8 @@ var SceneGraph = function () {
                     var spriteType = sprite.getSpriteType();
                     var spriteWidth = spriteType.getSpriteWidth();
                     var spriteHeight = spriteType.getSpriteHeight();
-                    var spriteXInPixels = sprite.getPosition().getX() + spriteWidth + this.viewport.getX();
-                    var spriteYInPixels = sprite.getPosition().getY() + spriteHeight + this.viewport.getY();
+                    var spriteXInPixels = sprite.getPosition().getX() + spriteWidth - this.viewport.getX();
+                    var spriteYInPixels = sprite.getPosition().getY() + spriteHeight - this.viewport.getY();
                     if (spriteXInPixels > 0 && spriteXInPixels < this.viewport.getWidth() + spriteWidth && spriteYInPixels > 0 && spriteYInPixels < this.viewport.getHeight() + spriteHeight) {
                         this.visibleSet.push(sprite);
                     }
@@ -3453,7 +3451,6 @@ var UIController = function UIController(canvasId, initScene) {
         }
         var main_character;
         main_character = _this.scene.getMainCharacter();
-        console.log(main_character == null);
         if (main_character != null) {
             main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth() / 2 + _this.scene.getViewport().getX(), event.clientY - main_character.getSpriteType().getSpriteHeight() / 2 + _this.scene.getViewport().getY(), main_character.getPosition().getZ(), main_character.getPosition().getW());
         }
