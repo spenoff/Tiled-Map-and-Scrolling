@@ -28,7 +28,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH, game.getSceneGraph(), gam
     var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
     //add the main character
     var mc_type = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-    var main_bug = new AnimatedSprite_1.AnimatedSprite(mc_type, "IDLE", "MAIN_BUG", new MainCharacterBehavior_1.MainCharacterBehavior());
+    var main_bug = new AnimatedSprite_1.AnimatedSprite(mc_type, "IDLE", "MAIN_BUG", new MainCharacterBehavior_1.MainCharacterBehavior(game.getSceneGraph()));
     var mc_randomX = Math.random() * worldWidth;
     var mc_randomY = Math.random() * worldHeight;
     main_bug.getPosition().set(mc_randomX, mc_randomY, 0, 1);
@@ -279,7 +279,7 @@ var BugOneBehavior = function (_SpriteBehavior_1$Spr) {
     function BugOneBehavior(init_sceneGraph) {
         _classCallCheck(this, BugOneBehavior);
 
-        var _this = _possibleConstructorReturn(this, (BugOneBehavior.__proto__ || Object.getPrototypeOf(BugOneBehavior)).call(this));
+        var _this = _possibleConstructorReturn(this, (BugOneBehavior.__proto__ || Object.getPrototypeOf(BugOneBehavior)).call(this, init_sceneGraph));
 
         _this.current_direction = BugOneBehavior.random_direction();
         _this.frames_until_change = BugOneBehavior.random_frame_num();
@@ -380,7 +380,7 @@ var BugTwoBehavior = function (_SpriteBehavior_1$Spr) {
     function BugTwoBehavior(init_main_sprite, init_scene_graph) {
         _classCallCheck(this, BugTwoBehavior);
 
-        var _this = _possibleConstructorReturn(this, (BugTwoBehavior.__proto__ || Object.getPrototypeOf(BugTwoBehavior)).call(this));
+        var _this = _possibleConstructorReturn(this, (BugTwoBehavior.__proto__ || Object.getPrototypeOf(BugTwoBehavior)).call(this, init_scene_graph));
 
         _this.current_direction = "UP";
         _this.frames_until_change = 50;
@@ -432,7 +432,7 @@ var BugTwoBehavior = function (_SpriteBehavior_1$Spr) {
             }
             this.frames_until_change--;
             if (this.frames_until_change == 0) {
-                //TODO Make sure it doesn't leave the map
+                // Make sure it doesn't leave the map
                 this.current_direction = this.current_direction == "UP" ? "DOWN" : "UP";
                 this.frames_until_change = 50;
             }
@@ -461,10 +461,10 @@ var SpriteBehavior_1 = require("./SpriteBehavior");
 var MainCharacterBehavior = function (_SpriteBehavior_1$Spr) {
     _inherits(MainCharacterBehavior, _SpriteBehavior_1$Spr);
 
-    function MainCharacterBehavior() {
+    function MainCharacterBehavior(init_sceneGraph) {
         _classCallCheck(this, MainCharacterBehavior);
 
-        return _possibleConstructorReturn(this, (MainCharacterBehavior.__proto__ || Object.getPrototypeOf(MainCharacterBehavior)).call(this));
+        return _possibleConstructorReturn(this, (MainCharacterBehavior.__proto__ || Object.getPrototypeOf(MainCharacterBehavior)).call(this, init_sceneGraph));
     }
 
     _createClass(MainCharacterBehavior, [{
@@ -487,10 +487,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 Object.defineProperty(exports, "__esModule", { value: true });
 
 var SpriteBehavior = function () {
-    function SpriteBehavior() {
+    function SpriteBehavior(init_sceneGraph) {
         _classCallCheck(this, SpriteBehavior);
 
         this.sprite = null;
+        this.sg = init_sceneGraph;
     }
 
     _createClass(SpriteBehavior, [{
@@ -506,21 +507,37 @@ var SpriteBehavior = function () {
     }, {
         key: "moveUp",
         value: function moveUp() {
+            if (this.getSprite().getPosition().getY() - 1 < 0) {
+                return;
+            }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() - 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveDown",
         value: function moveDown() {
+            var world = this.sg.getTiledLayers();
+            var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
+            if (this.getSprite().getPosition().getY() + 1 > worldHeight) {
+                return;
+            }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveLeft",
         value: function moveLeft() {
+            if (this.getSprite().getPosition().getX() - 1 < 0) {
+                return;
+            }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX() - 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }, {
         key: "moveRight",
         value: function moveRight() {
+            var world = this.sg.getTiledLayers();
+            var worldWidth = world[0].getColumns() * world[0].getTileSet().getTileWidth();
+            if (this.getSprite().getPosition().getX() + 1 > worldWidth) {
+                return;
+            }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
         }
     }]);

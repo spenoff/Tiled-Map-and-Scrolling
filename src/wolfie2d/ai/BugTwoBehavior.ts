@@ -9,7 +9,7 @@ export class BugTwoBehavior extends SpriteBehavior{
     private sceneGraph : SceneGraph;
 
     constructor(init_main_sprite : AnimatedSprite, init_scene_graph : SceneGraph) {
-        super();
+        super(init_scene_graph);
         this.current_direction = "UP";
         this.frames_until_change = 50;
         this.main_sprite = init_main_sprite;
@@ -49,7 +49,7 @@ export class BugTwoBehavior extends SpriteBehavior{
         }
         this.frames_until_change--;
         if(this.frames_until_change == 0) {
-            //TODO Make sure it doesn't leave the map
+            // Make sure it doesn't leave the map
             this.current_direction = this.current_direction=="UP"?"DOWN":"UP";
             this.frames_until_change = 50;
         }

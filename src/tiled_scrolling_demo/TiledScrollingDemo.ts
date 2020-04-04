@@ -34,7 +34,7 @@ game.getResourceManager().loadScene(DESERT_SCENE_PATH,
 
     //add the main character
     let mc_type : AnimatedSpriteType = game.getResourceManager().getAnimatedSpriteType("MAIN_BUG");
-    let main_bug : AnimatedSprite = new AnimatedSprite(mc_type, "IDLE", "MAIN_BUG", new MainCharacterBehavior());
+    let main_bug : AnimatedSprite = new AnimatedSprite(mc_type, "IDLE", "MAIN_BUG", new MainCharacterBehavior(game.getSceneGraph()));
     let mc_randomX : number = Math.random() * worldWidth;
     let mc_randomY : number = Math.random() * worldHeight;
     main_bug.getPosition().set(mc_randomX, mc_randomY, 0, 1);
