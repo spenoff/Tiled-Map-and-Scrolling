@@ -37,7 +37,7 @@ export abstract class SpriteBehavior {
 
         let world : TiledLayer[] = this.sg.getTiledLayers();
         let worldHeight : number = world[0].getRows() * world[0].getTileSet().getTileHeight();
-        if(this.getSprite().getPosition().getY() + 1 > worldHeight){ return; }
+        if(this.getSprite().getPosition().getY() + this.getSprite().getSpriteType().getSpriteWidth() + 1 >= worldHeight){ return; }
         this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), 
                                                      this.getSprite().getPosition().getY() + 1,
                                                      this.getSprite().getPosition().getZ(),
@@ -55,7 +55,7 @@ export abstract class SpriteBehavior {
     public moveRight() : void {
         let world : TiledLayer[] = this.sg.getTiledLayers();
         let worldWidth : number = world[0].getColumns() * world[0].getTileSet().getTileWidth();
-        if(this.getSprite().getPosition().getX() + 1 > worldWidth){ return; }
+        if(this.getSprite().getPosition().getX() + this.getSprite().getSpriteType().getSpriteWidth() + 1 >= worldWidth){ return; }
         this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, 
                                                      this.getSprite().getPosition().getY(),
                                                      this.getSprite().getPosition().getZ(),

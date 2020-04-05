@@ -571,7 +571,7 @@ var SpriteBehavior = function () {
         value: function moveDown() {
             var world = this.sg.getTiledLayers();
             var worldHeight = world[0].getRows() * world[0].getTileSet().getTileHeight();
-            if (this.getSprite().getPosition().getY() + 1 > worldHeight) {
+            if (this.getSprite().getPosition().getY() + this.getSprite().getSpriteType().getSpriteWidth() + 1 >= worldHeight) {
                 return;
             }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX(), this.getSprite().getPosition().getY() + 1, this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
@@ -589,7 +589,7 @@ var SpriteBehavior = function () {
         value: function moveRight() {
             var world = this.sg.getTiledLayers();
             var worldWidth = world[0].getColumns() * world[0].getTileSet().getTileWidth();
-            if (this.getSprite().getPosition().getX() + 1 > worldWidth) {
+            if (this.getSprite().getPosition().getX() + this.getSprite().getSpriteType().getSpriteWidth() + 1 >= worldWidth) {
                 return;
             }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
