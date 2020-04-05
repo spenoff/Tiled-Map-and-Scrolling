@@ -1,5 +1,6 @@
 import {SceneGraph} from '../scene/SceneGraph'
 import {AnimatedSprite} from "../scene/sprite/AnimatedSprite"
+import { MainCharacterBehavior } from '../ai/MainCharacterBehavior';
 
 export class GamePhysics {
     constructor() {
@@ -25,6 +26,25 @@ export class GamePhysics {
                     //We have a collision
                     if(sprite.getTypeName() == "BUG_ONE" && sprite.getState() != "DYING" && sprite.getState() != "DEAD"){
                         sprite.setState("DYING");
+                    } else if(sprite.getTypeName() == "BUG_TWO") {
+                        // let to_the_left : boolean = false;
+                        // let to_the_right : boolean = false;
+                        // let above : boolean = false;
+                        // let below : boolean = false;
+
+                        if(main_character.getPosition().getX() < sprite.getPosition().getX()) {
+                            main_character.getBehavior().backLeft();
+                        } else if(main_character.getPosition().getX() > sprite.getPosition().getX()) {
+                            main_character.getBehavior().backRight();
+                        }
+
+                        if(main_character.getPosition().getY() < sprite.getPosition().getY()) {
+                            main_character.getBehavior().backUp();
+                        } else if(main_character.getPosition().getY() > sprite.getPosition().getY()) {
+                            main_character.getBehavior().backDown();
+                        }
+
+
                     }
                 }
             }

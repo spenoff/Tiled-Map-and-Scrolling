@@ -464,12 +464,62 @@ var MainCharacterBehavior = function (_SpriteBehavior_1$Spr) {
     function MainCharacterBehavior(init_sceneGraph) {
         _classCallCheck(this, MainCharacterBehavior);
 
-        return _possibleConstructorReturn(this, (MainCharacterBehavior.__proto__ || Object.getPrototypeOf(MainCharacterBehavior)).call(this, init_sceneGraph));
+        var _this = _possibleConstructorReturn(this, (MainCharacterBehavior.__proto__ || Object.getPrototypeOf(MainCharacterBehavior)).call(this, init_sceneGraph));
+
+        _this.backing_up = false;
+        _this.backing_down = false;
+        _this.backing_left = false;
+        _this.backing_right = false;
+        _this.runaway_time = 10;
+        return _this;
     }
 
     _createClass(MainCharacterBehavior, [{
         key: "update",
-        value: function update() {}
+        value: function update() {
+            var _this2 = this;
+
+            if (this.getBackUp() && !this.backing_up) {
+                this.backing_up = true;
+                var upTime = setInterval(function () {
+                    return _this2.moveUp();
+                }, this.runaway_time);
+                //stop after 2 seconds
+                setTimeout(function () {
+                    clearInterval(upTime);_this2.backing_up = false;_this2.stopBackUp();
+                }, 2000);
+            }
+            if (this.getBackDown() && !this.backing_down) {
+                this.backing_down = true;
+                var downTime = setInterval(function () {
+                    return _this2.moveDown();
+                }, this.runaway_time);
+                //stop after 2 seconds
+                setTimeout(function () {
+                    clearInterval(downTime);_this2.backing_down = false;_this2.stopBackDown();
+                }, 2000);
+            }
+            if (this.getBackLeft() && !this.backing_left) {
+                this.backing_left = true;
+                var leftTime = setInterval(function () {
+                    return _this2.moveLeft();
+                }, this.runaway_time);
+                //stop after 2 seconds
+                setTimeout(function () {
+                    clearInterval(leftTime);_this2.backing_left = false;_this2.stopBackLeft();
+                }, 2000);
+            }
+            if (this.getBackRight() && !this.backing_right) {
+                this.backing_right = true;
+                var rightTime = setInterval(function () {
+                    return _this2.moveRight();
+                }, this.runaway_time);
+                //stop after 2 seconds
+                setTimeout(function () {
+                    clearInterval(rightTime);_this2.backing_right = false;_this2.stopBackRight();
+                }, 2000);
+            }
+        }
     }]);
 
     return MainCharacterBehavior;
@@ -490,6 +540,10 @@ var SpriteBehavior = function () {
     function SpriteBehavior(init_sceneGraph) {
         _classCallCheck(this, SpriteBehavior);
 
+        this.back_up = false;
+        this.back_down = false;
+        this.back_left = false;
+        this.back_right = false;
         this.sprite = null;
         this.sg = init_sceneGraph;
     }
@@ -539,6 +593,71 @@ var SpriteBehavior = function () {
                 return;
             }
             this.getSprite().getPosition().set(this.getSprite().getPosition().getX() + 1, this.getSprite().getPosition().getY(), this.getSprite().getPosition().getZ(), this.getSprite().getPosition().getW());
+        }
+    }, {
+        key: "backUp",
+        value: function backUp() {
+            this.back_up = true;
+        }
+    }, {
+        key: "backDown",
+        value: function backDown() {
+            this.back_down = true;
+        }
+    }, {
+        key: "backLeft",
+        value: function backLeft() {
+            this.back_left = true;
+        }
+    }, {
+        key: "backRight",
+        value: function backRight() {
+            this.back_right = true;
+        }
+    }, {
+        key: "stopBackUp",
+        value: function stopBackUp() {
+            this.back_up = false;
+        }
+    }, {
+        key: "stopBackDown",
+        value: function stopBackDown() {
+            this.back_down = false;
+        }
+    }, {
+        key: "stopBackLeft",
+        value: function stopBackLeft() {
+            this.back_left = false;
+        }
+    }, {
+        key: "stopBackRight",
+        value: function stopBackRight() {
+            this.back_right = false;
+        }
+    }, {
+        key: "getBackUp",
+        value: function getBackUp() {
+            return this.back_up;
+        }
+    }, {
+        key: "getBackDown",
+        value: function getBackDown() {
+            return this.back_down;
+        }
+    }, {
+        key: "getBackLeft",
+        value: function getBackLeft() {
+            return this.back_left;
+        }
+    }, {
+        key: "getBackRight",
+        value: function getBackRight() {
+            return this.back_right;
+        }
+    }, {
+        key: "isBacking",
+        value: function isBacking() {
+            return this.back_up || this.back_down || this.back_left || this.back_right;
         }
     }]);
 
@@ -1973,6 +2092,21 @@ var GamePhysics = function () {
                             //We have a collision
                             if (sprite.getTypeName() == "BUG_ONE" && sprite.getState() != "DYING" && sprite.getState() != "DEAD") {
                                 sprite.setState("DYING");
+                            } else if (sprite.getTypeName() == "BUG_TWO") {
+                                // let to_the_left : boolean = false;
+                                // let to_the_right : boolean = false;
+                                // let above : boolean = false;
+                                // let below : boolean = false;
+                                if (main_character.getPosition().getX() < sprite.getPosition().getX()) {
+                                    main_character.getBehavior().backLeft();
+                                } else if (main_character.getPosition().getX() > sprite.getPosition().getX()) {
+                                    main_character.getBehavior().backRight();
+                                }
+                                if (main_character.getPosition().getY() < sprite.getPosition().getY()) {
+                                    main_character.getBehavior().backUp();
+                                } else if (main_character.getPosition().getY() > sprite.getPosition().getY()) {
+                                    main_character.getBehavior().backDown();
+                                }
                             }
                         }
                     }
@@ -2829,7 +2963,7 @@ var SceneGraph = function () {
             }
             if (SceneGraph.moveDown && this.downPos - this.upPos + this.getViewport().getHeight() < worldHeight) {
                 this.downPos += 1;
-            }
+            } //TODO make left and right in this context make more sense
             if (SceneGraph.moveLeft && this.leftPos - this.rightPos + this.getViewport().getWidth() < worldWidth) {
                 this.leftPos += 1;
             }
@@ -3099,6 +3233,11 @@ var AnimatedSprite = function (_SceneObject_1$SceneO) {
                 this.frameCounter = 0;
             }
             this.behavior.update();
+        }
+    }, {
+        key: "getBehavior",
+        value: function getBehavior() {
+            return this.behavior;
         }
     }, {
         key: "contains",
@@ -3476,7 +3615,7 @@ var UIController = function UIController(canvasId, initScene) {
         }
         var main_character;
         main_character = _this.scene.getMainCharacter();
-        if (main_character != null) {
+        if (main_character != null && !main_character.getBehavior().isBacking()) {
             main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth() / 2 + _this.scene.getViewport().getX(), event.clientY - main_character.getSpriteType().getSpriteHeight() / 2 + _this.scene.getViewport().getY(), main_character.getPosition().getZ(), main_character.getPosition().getW());
         }
     };

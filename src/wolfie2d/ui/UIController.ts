@@ -78,7 +78,7 @@ export class UIController {
         }
         var main_character : AnimatedSprite;
         main_character = this.scene.getMainCharacter();
-        if(main_character != null) {
+        if(main_character != null && !main_character.getBehavior().isBacking()) {
              main_character.getPosition().set(event.clientX - main_character.getSpriteType().getSpriteWidth()/2 + this.scene.getViewport().getX(), 
                                               event.clientY - main_character.getSpriteType().getSpriteHeight()/2 + this.scene.getViewport().getY(), 
                                               main_character.getPosition().getZ(), 

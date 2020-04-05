@@ -69,6 +69,10 @@ export class AnimatedSprite extends SceneObject {
         this.behavior.update();
     }
 
+    public getBehavior() : SpriteBehavior {
+        return this.behavior;
+    }
+
     public contains(pointX : number, pointY : number) : boolean {
         let spriteWidth = this.getSpriteType().getSpriteWidth();
         let spriteHeight = this.getSpriteType().getSpriteHeight();

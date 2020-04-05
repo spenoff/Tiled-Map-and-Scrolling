@@ -7,6 +7,10 @@ import { TiledLayer } from '../scene/tiles/TiledLayer'
 export abstract class SpriteBehavior {
     private sprite : AnimatedSprite;
     private sg : SceneGraph;
+    private back_up = false;
+    private back_down = false;
+    private back_left = false;
+    private back_right = false;
 
     public constructor(init_sceneGraph : SceneGraph) {
         this.sprite = null;
@@ -56,6 +60,58 @@ export abstract class SpriteBehavior {
                                                      this.getSprite().getPosition().getY(),
                                                      this.getSprite().getPosition().getZ(),
                                                      this.getSprite().getPosition().getW());
+    }
+
+    public backUp() {
+        this.back_up = true;
+    }
+
+    public backDown() {
+        this.back_down = true;
+    }
+
+    public backLeft() {
+        this.back_left = true;
+    }
+
+    public backRight() {
+        this.back_right = true;
+    }
+
+    public stopBackUp() {
+        this.back_up = false;
+    }
+
+    public stopBackDown() {
+        this.back_down = false;
+    }
+
+    public stopBackLeft() {
+        this.back_left = false;
+    }
+
+    public stopBackRight() {
+        this.back_right = false;
+    }
+
+    public getBackUp() : boolean {
+        return this.back_up;
+    }
+
+    public getBackDown() : boolean {
+        return this.back_down;
+    }
+
+    public getBackLeft() : boolean {
+        return this.back_left;
+    }
+
+    public getBackRight() : boolean {
+        return this.back_right;
+    }
+
+    public isBacking() : boolean {
+        return this.back_up || this.back_down || this.back_left || this.back_right;
     }
 
     public abstract update() : void;
